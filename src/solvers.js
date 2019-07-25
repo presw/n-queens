@@ -44,10 +44,10 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
         if (piecesCount+1 < n) {
           solution = findNRooksSolution(n, piecesCount+1, newBoard, newValidCoords);
           if (Array.isArray(solution)) {
-            console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
             return solution;
           }
         } else {
+          console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
           return createSolution(n, newBoard);
         }
       }
@@ -192,7 +192,9 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
     rowIndex++;
     columnIndex = 0;
   }
-  console.log('Number of solutions for ' + n + ' queens:', solution);
+  if (nextValidCoords && nextValidCoords[0] === 0 && nextValidCoords[1] === 0) {
+    console.log('Number of solutions for ' + n + ' queens:', solution);
+  }
   return solution;
 };
 
