@@ -29,8 +29,9 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
   while (rowIndex < n) {
     for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = cloneBoard(n, board);
+      var newBoard = board;
       newBoard.togglePiece(rowIndex, i);
+
       if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()) {
         var newValidCoords = [];
         if (i + 1 >= n) {
@@ -52,6 +53,10 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
           return solution;
         }
       }
+      newBoard.togglePiece(rowIndex, i);
+      if (newBoard.hasAnyRowConflicts()) {
+        break;
+      }
     }
     rowIndex++;
     columnIndex = 0;
@@ -63,6 +68,7 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
 window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
 
   var solution = 0;
+
   if (typeof board === 'undefined') {
     board = new Board({n: n});
   }
@@ -73,7 +79,7 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
   while (rowIndex < n) {
     for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = cloneBoard(n, board);
+      var newBoard = board;
       newBoard.togglePiece(rowIndex, i);
       
       if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()) {
@@ -92,11 +98,18 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
           return 1;
         }
       }
+      newBoard.togglePiece(rowIndex, i);
+      if (newBoard.hasAnyRowConflicts()) {
+        break;
+      }
     }
     rowIndex++;
     columnIndex = 0;
   }
-  console.log('Number of solutions for ' + n + ' rooks:', solution);
+
+  if (nextValidCoords && nextValidCoords[0] === 0 && nextValidCoords[1] === 0) {
+    console.log('Number of solutions for ' + n + ' rooks:', solution);
+  }
   return solution;
 };
 
@@ -120,7 +133,7 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
   while (rowIndex < n) {
     for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = cloneBoard(n, board);
+      var newBoard = board;
       newBoard.togglePiece(rowIndex, i);
       if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
             && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
@@ -136,12 +149,17 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
         if (piecesCount+1 < n) {
           solution = findNQueensSolution(n, piecesCount+1, newBoard, newValidCoords);
           if (solution.length) {
-            console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
             return solution;
           }
         } else {
-          return createSolution(n, newBoard);
+          solution = createSolution(n, newBoard);
+          console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+          return solution;
         }
+      }
+      newBoard.togglePiece(rowIndex, i);
+      if (newBoard.hasAnyRowConflicts()) {
+        break;
       }
     }
     rowIndex++;
@@ -170,11 +188,12 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
   while (rowIndex < n) {
     for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = cloneBoard(n, board);
+      var newBoard = board;
       newBoard.togglePiece(rowIndex, i);
       
       if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
-            && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {        var newValidCoords = [];
+          && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
+        var newValidCoords = [];
         if (i + 1 >= n) {
           newValidCoords[0] = rowIndex + 1;
           newValidCoords[1] = 0;
@@ -187,6 +206,10 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
         } else {
           return 1;
         }
+      }
+      newBoard.togglePiece(rowIndex, i);
+      if (newBoard.hasAnyRowConflicts()) {
+        break;
       }
     }
     rowIndex++;
@@ -207,10 +230,10 @@ window.createSolution = function(n, board) {
   return solution;
 };
 
-window.cloneBoard = function(n, oldBoard) {
-  var newBoard = new Board({n: n});
-  for (var i = 0; i < n; i++) {
-    newBoard.attributes[i] = oldBoard.attributes[i].slice();
-  }
-  return newBoard;
-};
+// window.cloneBoard = function(n, oldBoard) {
+//   var newBoard = new Board({n: n});
+//   for (var i = 0; i < n; i++) {
+//     newBoard.attributes[i] = oldBoard.attributes[i].slice();
+//   }
+//   return newBoard;
+// };
