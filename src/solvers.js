@@ -55,42 +55,12 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
     rowIndex++;
     columnIndex = 0;
   }
-  // if arguments.length === 1 {
-  // board = new Board(n);
-  // }
-
-  // rowIndex = nextValidCoords[0];
-  // columnIndex = nextValidCoords[1];
-  /*
-  // while row (dependant on nextValidCoords) < n
-  // for loop to add pieces (use nextValidCoords for starting for loop)
-    // place a piece starting at nextValidCoords;
-    // check for validity - column and row
-      // increment count
-      // set nextValidCoords (current row and index + 1) // 0, 2 = 0, 3
-        // if index >= n
-          // nextRow = row + 1
-          // nextColumn = 0
-          // this pair is passed in as nextValidCoords
-      // if piecesCount < n
-        // set solution to recurse
-        // if (Array.isArray(solution){
-          // return solution
-      // else
-        // return board
-  // end
-  // row++
-  // columnIndex = 0;
-  */
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
-  
-  // var solution = [];
-  // console.log("TOP of the HOUR");
-  // console.log(board);
+
   var solution = 0;
   if (typeof board === 'undefined') {
     board = new Board({n: n});
@@ -104,12 +74,6 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
 
       var newBoard = cloneBoard(n, board);
       newBoard.togglePiece(rowIndex, i);
-      
-      // console.log(`OldBoard: ${piecesCount+1}`);
-      // console.log(n + ': count : original');
-      // console.log(board);
-      // console.log('new');
-      // console.log(newBoard);
       
       if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()) {
         var newValidCoords = [];
@@ -131,33 +95,7 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
     rowIndex++;
     columnIndex = 0;
   }
-  // if arguments.length === 1 {
-  // board = new Board(n);
-  // }
-
-  // rowIndex = nextValidCoords[0];
-  // columnIndex = nextValidCoords[1];
-  /*
-  // while row (dependant on nextValidCoords) < n
-  // for loop to add pieces (use nextValidCoords for starting for loop)
-    // place a piece starting at nextValidCoords;
-    // check for validity - column and row
-      // increment count
-      // set nextValidCoords (current row and index + 1) // 0, 2 = 0, 3
-        // if index >= n
-          // nextRow = row + 1
-          // nextColumn = 0
-          // this pair is passed in as nextValidCoords
-      // if piecesCount < n
-        // set solution to recurse
-        // if (Array.isArray(solution){
-          // return solution
-      // else
-        // return board
-  // end
-  // row++
-  // columnIndex = 0;
-  */
+  console.log('Number of solutions for ' + n + ' rooks:', solution);
   return solution;
 };
 
@@ -202,7 +140,6 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
             return solution;
           }
         } else {
-          console.log("WE PROBABLY AREN'T GETTING THIS");
           return createSolution(n, newBoard);
         }
       }
@@ -210,42 +147,13 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
     rowIndex++;
     columnIndex = 0;
   }
-  // if arguments.length === 1 {
-  // board = new Board(n);
-  // }
 
-  // rowIndex = nextValidCoords[0];
-  // columnIndex = nextValidCoords[1];
-  /*
-  // while row (dependant on nextValidCoords) < n
-  // for loop to add pieces (use nextValidCoords for starting for loop)
-    // place a piece starting at nextValidCoords;
-    // check for validity - column and row
-      // increment count
-      // set nextValidCoords (current row and index + 1) // 0, 2 = 0, 3
-        // if index >= n
-          // nextRow = row + 1
-          // nextColumn = 0
-          // this pair is passed in as nextValidCoords
-      // if piecesCount < n
-        // set solution to recurse
-        // if (Array.isArray(solution){
-          // return solution
-      // else
-        // return board
-  // end
-  // row++
-  // columnIndex = 0;
-  */
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
-  
-  // var solution = [];
-  // console.log("TOP of the HOUR");
-  // console.log(board);
+
   var solution = 0;
   if (typeof board === 'undefined') {
     board = new Board({n: n});
@@ -259,19 +167,11 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
 
   var rowIndex = nextValidCoords[0];
   var columnIndex = nextValidCoords[1];
-  console.log("Test running");
-  console.log(`Row index: ${rowIndex}, N: ${n}`)
   while (rowIndex < n) {
     for (var i = columnIndex; i < n; i++) {
 
       var newBoard = cloneBoard(n, board);
       newBoard.togglePiece(rowIndex, i);
-      
-      // console.log(`OldBoard: ${piecesCount+1}`);
-      // console.log(n + ': count : original');
-      // console.log(board);
-      // console.log('new');
-      // console.log(newBoard);
       
       if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
             && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {        var newValidCoords = [];
@@ -282,12 +182,9 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
           newValidCoords[0] = rowIndex;
           newValidCoords[1] = i + 1;
         }
-        console.log(`Pieces count + 1: ${piecesCount+1}`);
-        console.log(`N: ${n}`);
         if (piecesCount+1 < n) {
           solution += countNQueensSolutions(n, piecesCount+1, newBoard, newValidCoords);
         } else {
-          console.log("Return 1");
           return 1;
         }
       }
@@ -295,34 +192,7 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
     rowIndex++;
     columnIndex = 0;
   }
-  // if arguments.length === 1 {
-  // board = new Board(n);
-  // }
-
-  // rowIndex = nextValidCoords[0];
-  // columnIndex = nextValidCoords[1];
-  /*
-  // while row (dependant on nextValidCoords) < n
-  // for loop to add pieces (use nextValidCoords for starting for loop)
-    // place a piece starting at nextValidCoords;
-    // check for validity - column and row
-      // increment count
-      // set nextValidCoords (current row and index + 1) // 0, 2 = 0, 3
-        // if index >= n
-          // nextRow = row + 1
-          // nextColumn = 0
-          // this pair is passed in as nextValidCoords
-      // if piecesCount < n
-        // set solution to recurse
-        // if (Array.isArray(solution){
-          // return solution
-      // else
-        // return board
-  // end
-  // row++
-  // columnIndex = 0;
-  */
-  console.log('Number of solutions for ' + n + ' rooks:', solution);
+  console.log('Number of solutions for ' + n + ' queens:', solution);
   return solution;
 };
 
@@ -341,8 +211,4 @@ window.cloneBoard = function(n, oldBoard) {
     newBoard.attributes[i] = oldBoard.attributes[i].slice();
   }
   return newBoard;
-  // create new board
-  // iterate through old board
-  // set matching new board index to slice of oldBoard index
-  // return newBoard
 };
