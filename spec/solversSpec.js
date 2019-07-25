@@ -22,7 +22,7 @@ describe('solvers', function() {
   describe('countNRooksSolutions()', function() {
 
     it('finds the number of valid solutions for n of 1-8', function() {
-      _.range(1, 3).map(function(n) {
+      _.range(1, 9).map(function(n) {
         var solutionCount = countNRooksSolutions(n);
         var expectedSolutionCount = [1, 1, 2, 6, 24, 120, 720, 5040, 40320][n];
 
@@ -49,7 +49,6 @@ describe('solvers', function() {
         expect(numPieces).to.equal(n);
         expect(solutionBoard.hasAnyQueensConflicts()).to.be.equal(false);
       });
-      console.log("Reaches 2");
       // Check 2 and 3 for no solution
       [2, 3].map(function (n) {
         var solutionBoard = new Board(findNQueensSolution(n));

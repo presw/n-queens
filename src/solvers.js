@@ -36,7 +36,7 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
         break;
       }
 
-      if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()) {
+      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
         var newValidCoords = [];
         if (i + 1 >= n) {
           newValidCoords[0] = rowIndex + 1;
@@ -88,8 +88,7 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
         newBoard.togglePiece(rowIndex, i);
         break;
       }
-
-      if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()) {
+      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
         var newValidCoords = [];
         if (i + 1 >= n) {
           newValidCoords[0] = rowIndex + 1;
@@ -139,7 +138,7 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
         newBoard.togglePiece(rowIndex, i);
         break;
       }
-      if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
+      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
           && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
         var newValidCoords = [];
         if (i + 1 >= n) {
@@ -200,7 +199,7 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
         break;
       }
 
-      if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
+      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
           && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {
         var newValidCoords = [];
         if (i + 1 >= n) {
