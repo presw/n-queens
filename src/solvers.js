@@ -163,7 +163,6 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
-  console.log("N:" + n);
   var solution = [];
 
   if (arguments.length === 1) {
@@ -175,10 +174,6 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
     solution = createSolution(n, tempBoard);
     return solution;
   }
-
-  // if (n === 0) {
-  //   solution = [];
-  // }
 
   var rowIndex = nextValidCoords[0];
   var columnIndex = nextValidCoords[1];
@@ -256,9 +251,16 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
     board = new Board({n: n});
   }
 
+  if (n === 2 || n === 3) {
+    var tempBoard = new Board({n: n});
+    solution = createSolution(n, tempBoard);
+    return 0;
+  }
+
   var rowIndex = nextValidCoords[0];
   var columnIndex = nextValidCoords[1];
-
+  console.log("Test running");
+  console.log(`Row index: ${rowIndex}, N: ${n}`)
   while (rowIndex < n) {
     for (var i = columnIndex; i < n; i++) {
 
@@ -271,7 +273,7 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
       // console.log('new');
       // console.log(newBoard);
       
-if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
+      if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
             && !newBoard.hasAnyMajorDiagonalConflicts() && !newBoard.hasAnyMinorDiagonalConflicts()) {        var newValidCoords = [];
         if (i + 1 >= n) {
           newValidCoords[0] = rowIndex + 1;
@@ -280,10 +282,12 @@ if (!newBoard.hasAnyRowConflicts() && !newBoard.hasAnyColConflicts()
           newValidCoords[0] = rowIndex;
           newValidCoords[1] = i + 1;
         }
-
+        console.log(`Pieces count + 1: ${piecesCount+1}`);
+        console.log(`N: ${n}`);
         if (piecesCount+1 < n) {
           solution += countNQueensSolutions(n, piecesCount+1, newBoard, newValidCoords);
         } else {
+          console.log("Return 1");
           return 1;
         }
       }
