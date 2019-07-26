@@ -24,33 +24,25 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
   var rowIndex = nextValidCoords[0];
   var columnIndex = nextValidCoords[1];
 
-  while (rowIndex < n) {
-    for (var i = columnIndex; i < n; i++) {
+  for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = board;
-      newBoard.togglePiece(rowIndex, i);
-      if (newBoard.hasAnyRowConflicts()) {
-        newBoard.togglePiece(rowIndex, i);
-        break;
-      }
+    var newBoard = board;
+    newBoard.togglePiece(rowIndex, i);
 
-      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
-        var newValidCoords = newCoords(n, rowIndex, i);
-        if (piecesCount+1 < n) {
-          solution = findNRooksSolution(n, piecesCount+1, newBoard, newValidCoords);
-          if (Array.isArray(solution)) {
-            return solution;
-          }
-        } else {
-          solution = createSolution(n, newBoard);
-          console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+    if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
+      var newValidCoords = newCoords(n, rowIndex, i);
+      if (piecesCount+1 < n) {
+        solution = findNRooksSolution(n, piecesCount+1, newBoard, newValidCoords);
+        if (Array.isArray(solution)) {
           return solution;
         }
+      } else {
+        solution = createSolution(n, newBoard);
+        console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+        return solution;
       }
-      newBoard.togglePiece(rowIndex, i);
     }
-    rowIndex++;
-    columnIndex = 0;
+    newBoard.togglePiece(rowIndex, i);
   }
   return solution;
 };
@@ -70,22 +62,14 @@ window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoord
   // var rowIndex = nextValidCoords[0];
   // var columnIndex = nextValidCoords[1];
 
-  // while (rowIndex < n) {
-  //   for (var i = columnIndex; i < n; i++) {
-  //     var newBoard = board;
-  //     newBoard.togglePiece(rowIndex, i);
-  //     if (newBoard.hasAnyRowConflicts()) {
-  //       newBoard.togglePiece(rowIndex, i);
-  //       break;
-  //     }
-  //     if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
-  //       var newValidCoords = newCoords(n, rowIndex, i);
-  //       solution += countNRooksSolutions(n, piecesCount+1, newBoard, newValidCoords);
-  //     }
-  //     newBoard.togglePiece(rowIndex, i);
+  // for (var i = columnIndex; i < n; i++) {
+  //   var newBoard = board;
+  //   newBoard.togglePiece(rowIndex, i);
+  //   if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
+  //     var newValidCoords = newCoords(n, rowIndex, i);
+  //     solution += countNRooksSolutions(n, piecesCount+1, newBoard, newValidCoords);
   //   }
-  //   rowIndex++;
-  //   columnIndex = 0;
+  //   newBoard.togglePiece(rowIndex, i);
   // }
 
   // if (nextValidCoords && nextValidCoords[0] === 0 && nextValidCoords[1] === 0) {
@@ -116,37 +100,29 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
   var rowIndex = nextValidCoords[0];
   var columnIndex = nextValidCoords[1];
 
-  while (rowIndex < n) {
-    for (var i = columnIndex; i < n; i++) {
+  for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = board;
-      newBoard.togglePiece(rowIndex, i);
-      if (newBoard.hasAnyRowConflicts()) {
-        newBoard.togglePiece(rowIndex, i);
-        break;
-      }
+    var newBoard = board;
+    newBoard.togglePiece(rowIndex, i);
 
-      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
-          && !newBoard.hasMajorDiagonalConflictAt(i - rowIndex)
-          && !newBoard.hasMinorDiagonalConflictAt(i + rowIndex)) {
+    if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
+        && !newBoard.hasMajorDiagonalConflictAt(i - rowIndex)
+        && !newBoard.hasMinorDiagonalConflictAt(i + rowIndex)) {
 
-        var newValidCoords = newCoords(n, rowIndex, i);
+      var newValidCoords = newCoords(n, rowIndex, i);
 
-        if (piecesCount+1 < n) {
-          solution = findNQueensSolution(n, piecesCount+1, newBoard, newValidCoords);
-          if (solution.length) {
-            return solution;
-          }
-        } else {
-          solution = createSolution(n, newBoard);
-          console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+      if (piecesCount+1 < n) {
+        solution = findNQueensSolution(n, piecesCount+1, newBoard, newValidCoords);
+        if (solution.length) {
           return solution;
         }
+      } else {
+        solution = createSolution(n, newBoard);
+        console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+        return solution;
       }
-      newBoard.togglePiece(rowIndex, i);
     }
-    rowIndex++;
-    columnIndex = 0;
+    newBoard.togglePiece(rowIndex, i);
   }
 
   return solution;
@@ -161,37 +137,30 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
   }
 
   if (n === 2 || n === 3) {
-
     return 0;
   }
 
-  if (piecesCount >= n && n !== 0) {
+  if (piecesCount >= n) {
     return 1;
   }
 
   var rowIndex = nextValidCoords[0];
   var columnIndex = nextValidCoords[1];
-  while (rowIndex < n) {
-    for (var i = columnIndex; i < n; i++) {
 
-      var newBoard = board;
-      newBoard.togglePiece(rowIndex, i);
-      if (newBoard.hasAnyRowConflicts()) {
-        newBoard.togglePiece(rowIndex, i);
-        break;
-      }
+  for (var i = columnIndex; i < n; i++) {
 
-      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
-          && !newBoard.hasMajorDiagonalConflictAt(i - rowIndex)
-          && !newBoard.hasMinorDiagonalConflictAt(i + rowIndex)) {
-        var newValidCoords = newCoords(n, rowIndex, i);
-        solution += countNQueensSolutions(n, piecesCount+1, newBoard, newValidCoords);
-      }
-      newBoard.togglePiece(rowIndex, i);
+    var newBoard = board;
+    newBoard.togglePiece(rowIndex, i);
+
+    if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
+        && !newBoard.hasMajorDiagonalConflictAt(i - rowIndex)
+        && !newBoard.hasMinorDiagonalConflictAt(i + rowIndex)) {
+      var newValidCoords = newCoords(n, rowIndex, i);
+      solution += countNQueensSolutions(n, piecesCount+1, newBoard, newValidCoords);
     }
-    rowIndex++;
-    columnIndex = 0;
+    newBoard.togglePiece(rowIndex, i);
   }
+
   if (nextValidCoords && nextValidCoords[0] === 0 && nextValidCoords[1] === 0) {
     console.log('Number of solutions for ' + n + ' queens:', solution);
   }
@@ -209,12 +178,23 @@ window.createSolution = function(n, board) {
 
 var newCoords = (n, r, c) => {
   var coordsArray = [];
-  if (c + 1 >= n) {
-    coordsArray[0] = r + 1;
-    coordsArray[1] = 0;
-  } else {
-    coordsArray[0] = r;
-    coordsArray[1] = c + 1;
-  }
-  return coordsArray;
+  return [r+1, 0];
+}
+
+function testCase1() {
+  var suite = new Benchmark.Suite;
+
+  suite.add('boardTest', function() {
+     var solutionBoard = new Board(findNRooksSolution(8));
+  });
+
+  suite.on('start', function() {
+    console.log("Benchmark Started");
+  });
+
+  suite.on('complete', function() {
+    console.log('bench completed');
+  });
+
+  suite.run();
 }
