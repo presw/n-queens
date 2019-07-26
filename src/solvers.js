@@ -13,11 +13,9 @@
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
-
-
 window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
 
-  var solution = undefined;
+  var solution = 0;
 
   if (arguments.length === 1) {
     board = new Board({n: n});
@@ -37,15 +35,7 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
       }
 
       if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
-        var newValidCoords = [];
-        if (i + 1 >= n) {
-          newValidCoords[0] = rowIndex + 1;
-          newValidCoords[1] = 0;
-        } else {
-          newValidCoords[0] = rowIndex;
-          newValidCoords[1] = i + 1;
-        }
-
+        var newValidCoords = newCoords(n, rowIndex, i);
         if (piecesCount+1 < n) {
           solution = findNRooksSolution(n, piecesCount+1, newBoard, newValidCoords);
           if (Array.isArray(solution)) {
@@ -67,53 +57,50 @@ window.findNRooksSolution = function(n, piecesCount = 0, board, nextValidCoords 
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
-  var solution = 0;
+  // var solution = 0;
 
-  if (typeof board === 'undefined') {
-    board = new Board({n: n});
-  }
+  // if (arguments.length === 1) {
+  //   board = new Board({n: n});
+  // }
 
-  if (piecesCount >= n) {
-    return 1;
-  }
+  // if (piecesCount >= n) {
+  //   return 1;
+  // }
 
-  var rowIndex = nextValidCoords[0];
-  var columnIndex = nextValidCoords[1];
+  // var rowIndex = nextValidCoords[0];
+  // var columnIndex = nextValidCoords[1];
 
-  while (rowIndex < n) {
-    for (var i = columnIndex; i < n; i++) {
-      var newBoard = board;
-      newBoard.togglePiece(rowIndex, i);
-      if (newBoard.hasAnyRowConflicts()) {
-        newBoard.togglePiece(rowIndex, i);
-        break;
-      }
-      if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
-        var newValidCoords = [];
-        if (i + 1 >= n) {
-          newValidCoords[0] = rowIndex + 1;
-          newValidCoords[1] = 0;
-        } else {
-          newValidCoords[0] = rowIndex;
-          newValidCoords[1] = i + 1;
-        }
-        solution += countNRooksSolutions(n, piecesCount+1, newBoard, newValidCoords);
-      }
+  // while (rowIndex < n) {
+  //   for (var i = columnIndex; i < n; i++) {
+  //     var newBoard = board;
+  //     newBoard.togglePiece(rowIndex, i);
+  //     if (newBoard.hasAnyRowConflicts()) {
+  //       newBoard.togglePiece(rowIndex, i);
+  //       break;
+  //     }
+  //     if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)) {
+  //       var newValidCoords = newCoords(n, rowIndex, i);
+  //       solution += countNRooksSolutions(n, piecesCount+1, newBoard, newValidCoords);
+  //     }
+  //     newBoard.togglePiece(rowIndex, i);
+  //   }
+  //   rowIndex++;
+  //   columnIndex = 0;
+  // }
 
-      newBoard.togglePiece(rowIndex, i);
-    }
-    rowIndex++;
-    columnIndex = 0;
-  }
+  // if (nextValidCoords && nextValidCoords[0] === 0 && nextValidCoords[1] === 0) {
+  //   console.log('Number of solutions for ' + n + ' rooks:', solution);
+  // }
+  // return solution;
+  // return n;
 
-  if (nextValidCoords && nextValidCoords[0] === 0 && nextValidCoords[1] === 0) {
-    console.log('Number of solutions for ' + n + ' rooks:', solution);
-  }
-  return solution;
+  var factorial = function fac(n) { return n < 2 ? 1 : n * fac(n - 1); };
+  return factorial(n);
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
+
   var solution = [];
 
   if (arguments.length === 1) {
@@ -142,14 +129,8 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
       if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
           && !newBoard.hasMajorDiagonalConflictAt(i - rowIndex)
           && !newBoard.hasMinorDiagonalConflictAt(i + rowIndex)) {
-        var newValidCoords = [];
-        if (i + 1 >= n) {
-          newValidCoords[0] = rowIndex + 1;
-          newValidCoords[1] = 0;
-        } else {
-          newValidCoords[0] = rowIndex;
-          newValidCoords[1] = i + 1;
-        }
+
+        var newValidCoords = newCoords(n, rowIndex, i);
 
         if (piecesCount+1 < n) {
           solution = findNQueensSolution(n, piecesCount+1, newBoard, newValidCoords);
@@ -175,13 +156,12 @@ window.findNQueensSolution = function(n, piecesCount = 0, board, nextValidCoords
 window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoords = [0, 0]) {
 
   var solution = 0;
-  if (typeof board === 'undefined') {
+  if (arguments.length === 1) {
     board = new Board({n: n});
   }
 
   if (n === 2 || n === 3) {
-    var tempBoard = new Board({n: n});
-    solution = createSolution(n, tempBoard);
+
     return 0;
   }
 
@@ -204,14 +184,7 @@ window.countNQueensSolutions = function(n, piecesCount = 0, board, nextValidCoor
       if (!newBoard.hasRowConflictAt(rowIndex) && !newBoard.hasColConflictAt(i)
           && !newBoard.hasMajorDiagonalConflictAt(i - rowIndex)
           && !newBoard.hasMinorDiagonalConflictAt(i + rowIndex)) {
-        var newValidCoords = [];
-        if (i + 1 >= n) {
-          newValidCoords[0] = rowIndex + 1;
-          newValidCoords[1] = 0;
-        } else {
-          newValidCoords[0] = rowIndex;
-          newValidCoords[1] = i + 1;
-        }
+        var newValidCoords = newCoords(n, rowIndex, i);
         solution += countNQueensSolutions(n, piecesCount+1, newBoard, newValidCoords);
       }
       newBoard.togglePiece(rowIndex, i);
@@ -233,3 +206,15 @@ window.createSolution = function(n, board) {
   }
   return solution;
 };
+
+var newCoords = (n, r, c) => {
+  var coordsArray = [];
+  if (c + 1 >= n) {
+    coordsArray[0] = r + 1;
+    coordsArray[1] = 0;
+  } else {
+    coordsArray[0] = r;
+    coordsArray[1] = c + 1;
+  }
+  return coordsArray;
+}
